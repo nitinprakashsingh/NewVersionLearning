@@ -3,10 +3,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import DetailsScreen from '../screens/DetailsScreen';
-import HomeScreen from '../screens/HomeScreen';
+import LoginScreen from '../screens/Login';
+import OtpScreen from '../screens/OtpScreen';
+import HomeScreen from '../screens/Login';
 
 export type RootStackParamList = {
-  Home: undefined;
+  Login: undefined;
+  Otp: {
+    mobileNumber: string;
+  };
   Details: {
     message?: string;
   };
@@ -18,7 +23,7 @@ function RootNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Home"
+        initialRouteName="Login"
         screenOptions={{
           headerStyle: {
             backgroundColor: '#f7f8fa',
@@ -32,9 +37,14 @@ function RootNavigator() {
           },
         }}>
         <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ title: 'Home' }}
+          name="Login"
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Otp"
+          component={OtpScreen}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Details"
