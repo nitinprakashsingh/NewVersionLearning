@@ -14,7 +14,7 @@ import {
 import HealthHero from '../components/HealthHero';
 import type { RootStackParamList } from '../navigation/RootNavigator';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
+type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
 function HomeScreen({ navigation }: Props) {
   const [mobileNumber, setMobileNumber] = useState('');
