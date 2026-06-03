@@ -16,8 +16,9 @@ import type { RootStackParamList } from '../navigation/RootNavigator';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
-function HomeScreen({ navigation }: Props) {
+function LoginScreen({ navigation }: Props) {
   const [mobileNumber, setMobileNumber] = useState('');
+  const isValidMobile = /^[0-9]{10}$/.test(mobileNumber);
 
   return (
     <KeyboardAvoidingView
@@ -47,21 +48,28 @@ function HomeScreen({ navigation }: Props) {
           value={mobileNumber}
         />
 
+        {!isValidMobile && mobileNumber.length > 0 ? (
+          <Text style={styles.errorText}>Please enter a valid 10-digit mobile number.</Text>
+        ) : null}
+
         <Pressable
           onPress={() =>
+            isValidMobile &&
             navigation.navigate('Otp', {
-              mobileNumber: mobileNumber || '997820048',
+              mobileNumber,
             })
           }
           style={({ pressed }) => [
             styles.continueButton,
+            !isValidMobile && styles.disabledButton,
             pressed && styles.pressed,
-          ]}>
+          ]}
+          disabled={!isValidMobile}>
           <Text style={styles.continueText}>Continue</Text>
         </Pressable>
 
         <Text style={styles.termsText}>
-          By Continuing you agree to our T&amp;Cs and Privacy Policy
+          By continuing you agree to our T&amp;Cs and Privacy Policy
         </Text>
       </View>
     </KeyboardAvoidingView>
@@ -107,10 +115,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 48,
   },
+  disabledButton: {
+    backgroundColor: '#91d6ca',
+  },
   continueText: {
     color: '#ffffff',
     fontSize: 29,
     fontWeight: '800',
+  },
+  errorText: {
+    color: '#d32f2f',
+    fontSize: 16,
+    marginTop: 12,
+    marginLeft: 6,
   },
   termsText: {
     color: '#777777',
@@ -124,4 +141,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default LoginScreen;

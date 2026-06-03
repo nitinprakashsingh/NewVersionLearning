@@ -4,6 +4,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
+  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
@@ -42,57 +43,62 @@ function OtpScreen({ navigation, route }: Props) {
       style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor="#7658bd" />
 
-      <HealthHero />
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}>
+        <HealthHero />
 
-      <View style={styles.otpPanel}>
-        <Text style={styles.panelTitle}>Verify OTP</Text>
+        <View style={styles.otpPanel}>
+          <Text style={styles.panelTitle}>Verify OTP</Text>
 
-        <View style={styles.sentRow}>
-          <Text style={styles.sentText}>Otp sent to {mobileNumber}</Text>
+          <View style={styles.sentRow}>
+            <Text style={styles.sentText}>Otp sent to {mobileNumber}</Text>
+            <Pressable
+              onPress={() => navigation.goBack()}
+              style={({ pressed }) => [
+                styles.editButton,
+                pressed && styles.pressed,
+              ]}>
+              <Text style={styles.editText}>Edit</Text>
+            </Pressable>
+          </View>
+
+          <Text style={styles.typedOtp}>{displayOtp}</Text>
+
+          <View style={styles.otpBoxes}>
+            {otp.map((digit, index) => (
+              <TextInput
+                key={index}
+                keyboardType="number-pad"
+                maxLength={1}
+                onChangeText={value => updateOtp(value, index)}
+                ref={ref => {
+                  inputRefs.current[index] = ref;
+                }}
+                style={styles.otpInput}
+                textAlign="center"
+                value={digit}
+              />
+            ))}
+          </View>
+
+          <Text style={styles.resendText}>Resend OTP in 00.30</Text>
+
           <Pressable
-            onPress={() => navigation.goBack()}
+            onPress={() =>
+              navigation.navigate('Details', {
+                message: `OTP verified: ${displayOtp}`,
+              })
+            }
             style={({ pressed }) => [
-              styles.editButton,
+              styles.verifyButton,
               pressed && styles.pressed,
             ]}>
-            <Text style={styles.editText}>Edit</Text>
+            <Text style={styles.verifyText}>Verify OTP</Text>
           </Pressable>
         </View>
-
-        <Text style={styles.typedOtp}>{displayOtp}</Text>
-
-        <View style={styles.otpBoxes}>
-          {otp.map((digit, index) => (
-            <TextInput
-              key={index}
-              keyboardType="number-pad"
-              maxLength={1}
-              onChangeText={value => updateOtp(value, index)}
-              ref={ref => {
-                inputRefs.current[index] = ref;
-              }}
-              style={styles.otpInput}
-              textAlign="center"
-              value={digit}
-            />
-          ))}
-        </View>
-
-        <Text style={styles.resendText}>Resend OTP in 00.30</Text>
-
-        <Pressable
-          onPress={() =>
-            navigation.navigate('Details', {
-              message: `OTP verified: ${displayOtp}`,
-            })
-          }
-          style={({ pressed }) => [
-            styles.verifyButton,
-            pressed && styles.pressed,
-          ]}>
-          <Text style={styles.verifyText}>Verify OTP</Text>
-        </Pressable>
-      </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
@@ -102,12 +108,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffffff',
   },
+  scrollContent: {
+    flexGrow: 1,
+  },
   otpPanel: {
     backgroundColor: '#ffffff',
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     marginTop: -46,
     minHeight: 360,
+    paddingBottom: 80,
     paddingHorizontal: 20,
     paddingTop: 54,
   },
