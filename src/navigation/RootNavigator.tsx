@@ -5,7 +5,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import DetailsScreen from '../screens/DetailsScreen';
 import LoginScreen from '../screens/Login';
 import OtpScreen from '../screens/OtpScreen';
-import HomeScreen from '../screens/Login';
 
 export type RootStackParamList = {
   Login: undefined;

@@ -99,16 +99,16 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   skipPlaceholder: {
-    height: 54,
+    height: 48,
   },
   skipText: {
     color: '#ffffff',
-    fontSize: 30,
+    fontSize: 17,
     fontWeight: '300',
   },
   illustration: {
     height: 300,
-    marginTop: -36,
+    marginTop: -16,
     position: 'relative',
     transform: [{ scale: 0.72 }],
     width: 390,
@@ -400,9 +400,9 @@ const styles = StyleSheet.create({
   },
   heroTitle: {
     color: '#ffffff',
-    fontSize: 31,
+    fontSize: 19,
     fontWeight: '800',
-    marginTop: -12,
+    marginTop: -4,
     textAlign: 'center',
     textShadowColor: 'rgba(20, 16, 42, 0.3)',
     textShadowOffset: { width: 0, height: 6 },

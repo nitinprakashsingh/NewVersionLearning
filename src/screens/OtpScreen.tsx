@@ -4,6 +4,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
+  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
@@ -42,57 +43,62 @@ function OtpScreen({ navigation, route }: Props) {
       style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor="#7658bd" />
 
-      <HealthHero />
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}>
+        <HealthHero />
 
-      <View style={styles.otpPanel}>
-        <Text style={styles.panelTitle}>Verify OTP</Text>
+        <View style={styles.otpPanel}>
+          <Text style={styles.panelTitle}>Verify OTP</Text>
 
-        <View style={styles.sentRow}>
-          <Text style={styles.sentText}>Otp sent to {mobileNumber}</Text>
+          <View style={styles.sentRow}>
+            <Text style={styles.sentText}>Otp sent to {mobileNumber}</Text>
+            <Pressable
+              onPress={() => navigation.goBack()}
+              style={({ pressed }) => [
+                styles.editButton,
+                pressed && styles.pressed,
+              ]}>
+              <Text style={styles.editText}>Edit</Text>
+            </Pressable>
+          </View>
+
+          <Text style={styles.typedOtp}>{displayOtp}</Text>
+
+          <View style={styles.otpBoxes}>
+            {otp.map((digit, index) => (
+              <TextInput
+                key={index}
+                keyboardType="number-pad"
+                maxLength={1}
+                onChangeText={value => updateOtp(value, index)}
+                ref={ref => {
+                  inputRefs.current[index] = ref;
+                }}
+                style={styles.otpInput}
+                textAlign="center"
+                value={digit}
+              />
+            ))}
+          </View>
+
+          <Text style={styles.resendText}>Resend OTP in 00.30</Text>
+
           <Pressable
-            onPress={() => navigation.goBack()}
+            onPress={() =>
+              navigation.navigate('Details', {
+                message: `OTP verified: ${displayOtp}`,
+              })
+            }
             style={({ pressed }) => [
-              styles.editButton,
+              styles.verifyButton,
               pressed && styles.pressed,
             ]}>
-            <Text style={styles.editText}>Edit</Text>
+            <Text style={styles.verifyText}>Verify OTP</Text>
           </Pressable>
         </View>
-
-        <Text style={styles.typedOtp}>{displayOtp}</Text>
-
-        <View style={styles.otpBoxes}>
-          {otp.map((digit, index) => (
-            <TextInput
-              key={index}
-              keyboardType="number-pad"
-              maxLength={1}
-              onChangeText={value => updateOtp(value, index)}
-              ref={ref => {
-                inputRefs.current[index] = ref;
-              }}
-              style={styles.otpInput}
-              textAlign="center"
-              value={digit}
-            />
-          ))}
-        </View>
-
-        <Text style={styles.resendText}>Resend OTP in 00.30</Text>
-
-        <Pressable
-          onPress={() =>
-            navigation.navigate('Details', {
-              message: `OTP verified: ${displayOtp}`,
-            })
-          }
-          style={({ pressed }) => [
-            styles.verifyButton,
-            pressed && styles.pressed,
-          ]}>
-          <Text style={styles.verifyText}>Verify OTP</Text>
-        </Pressable>
-      </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
@@ -102,62 +108,68 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffffff',
   },
+  scrollContent: {
+    flexGrow: 1,
+  },
   otpPanel: {
     backgroundColor: '#ffffff',
-    borderTopLeftRadius: 46,
-    borderTopRightRadius: 46,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
     marginTop: -46,
     minHeight: 360,
-    paddingHorizontal: 40,
-    paddingTop: 60,
+    paddingBottom: 80,
+    paddingHorizontal: 20,
+    paddingTop: 54,
   },
   panelTitle: {
     color: '#000000',
-    fontSize: 31,
+    fontSize: 24,
     fontWeight: '800',
-    marginBottom: 10,
+    marginBottom: 8,
   },
   sentRow: {
     alignItems: 'center',
     flexDirection: 'row',
-    gap: 14,
+    gap: 8,
   },
   sentText: {
     color: '#777777',
-    fontSize: 24,
+    fontSize: 17,
   },
   editButton: {
-    paddingHorizontal: 4,
-    paddingVertical: 6,
+    paddingHorizontal: 6,
+    paddingVertical: 4,
   },
   editText: {
     color: '#06a96e',
-    fontSize: 16,
+    fontSize: 13,
     fontWeight: '700',
   },
   typedOtp: {
     color: '#000000',
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: '400',
-    marginTop: 58,
+    marginTop: 82,
     paddingLeft: 24,
   },
   otpBoxes: {
     flexDirection: 'row',
     gap: 8,
     justifyContent: 'space-between',
-    marginTop: 28,
+    marginTop: 86,
   },
   otpInput: {
     backgroundColor: '#fafafa',
     borderColor: '#eeeeee',
-    borderRadius: 14,
+    borderRadius: 9,
     borderWidth: 1,
     color: '#000000',
     elevation: 1,
-    fontSize: 30,
+    fontSize: 22,
     fontWeight: '800',
-    height: 74,
+    height: 37,
+    includeFontPadding: false,
+    padding: 0,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.06,
@@ -166,21 +178,21 @@ const styles = StyleSheet.create({
   },
   resendText: {
     color: '#777777',
-    fontSize: 24,
-    marginTop: 45,
+    fontSize: 18,
+    marginTop: 46,
     paddingLeft: 8,
   },
   verifyButton: {
     alignItems: 'center',
     backgroundColor: '#10b79f',
-    borderRadius: 22,
-    height: 94,
+    borderRadius: 16,
+    height: 47,
     justifyContent: 'center',
-    marginTop: 40,
+    marginTop: 46,
   },
   verifyText: {
     color: '#ffffff',
-    fontSize: 29,
+    fontSize: 18,
     fontWeight: '800',
   },
   pressed: {
