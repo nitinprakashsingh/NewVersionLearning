@@ -28,7 +28,11 @@ function LoginScreen({ navigation }: Props) {
 
       <HealthHero
         showSkip
-        onSkip={() => navigation.navigate('Home')}
+        onSkip={() =>
+          navigation.navigate('Details', {
+            message: 'Login skipped',
+          })
+        }
       />
 
       <View style={styles.loginPanel}>

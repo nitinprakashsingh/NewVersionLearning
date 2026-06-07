@@ -86,7 +86,11 @@ function OtpScreen({ navigation, route }: Props) {
           <Text style={styles.resendText}>Resend OTP in 00.30</Text>
 
           <Pressable
-            onPress={() => navigation.navigate('Home')}
+            onPress={() =>
+              navigation.navigate('Details', {
+                message: `OTP verified: ${displayOtp}`,
+              })
+            }
             style={({ pressed }) => [
               styles.verifyButton,
               pressed && styles.pressed,
