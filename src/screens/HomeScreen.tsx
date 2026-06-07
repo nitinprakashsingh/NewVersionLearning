@@ -274,6 +274,9 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 14,
   },
+  pressed: {
+    opacity: 0.78,
+  },
   cardRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
