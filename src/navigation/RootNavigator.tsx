@@ -6,6 +6,7 @@ import DetailsScreen from '../screens/DetailsScreen';
 import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from '../screens/Login';
 import OtpScreen from '../screens/OtpScreen';
+import TopCareScreen from '../screens/TopCareScreen';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -13,6 +14,7 @@ export type RootStackParamList = {
     mobileNumber: string;
   };
   Home: undefined;
+  TopCare: undefined;
   Details: {
     message?: string;
   };
@@ -50,6 +52,11 @@ function RootNavigator() {
         <Stack.Screen
           name="Home"
           component={HomeScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="TopCare"
+          component={TopCareScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen

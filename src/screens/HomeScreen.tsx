@@ -1,3 +1,5 @@
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import {
   Pressable,
@@ -9,6 +11,8 @@ import {
   TextInput,
   View,
 } from 'react-native';
+
+import type { RootStackParamList } from '../navigation/RootNavigator';
 
 type CareItem = {
   id: string;
@@ -25,6 +29,8 @@ const careItems: CareItem[] = [
 ];
 
 function HomeScreen() {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, 'Home'>>();
+
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor="#7d56f1" />
@@ -69,7 +75,9 @@ function HomeScreen() {
 
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Common Care</Text>
-          <Pressable style={styles.viewAllButton}>
+          <Pressable
+            onPress={() => navigation.navigate('TopCare')}
+            style={({ pressed }) => [styles.viewAllButton, pressed && styles.pressed]}>
             <Text style={styles.viewAllText}>View all</Text>
           </Pressable>
         </View>
@@ -87,7 +95,9 @@ function HomeScreen() {
 
         <View style={styles.sectionHeader}> 
           <Text style={styles.sectionTitle}>Seasonal Care</Text>
-          <Pressable style={styles.viewAllButton}>
+          <Pressable
+            onPress={() => navigation.navigate('TopCare')}
+            style={({ pressed }) => [styles.viewAllButton, pressed && styles.pressed]}>
             <Text style={styles.viewAllText}>View all</Text>
           </Pressable>
         </View>
