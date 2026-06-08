@@ -1,334 +1,218 @@
 import React from 'react';
 import {
-  Pressable,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TextInput,
   View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  SafeAreaView,
 } from 'react-native';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
 
-type CareItem = {
-  id: string;
-  icon: string;
-  label: string;
+type HomeScreenProps = {
+  navigation: DrawerNavigationProp<any>;
 };
 
-const careItems: CareItem[] = [
-  { id: '1', icon: '🦠', label: 'Disease name-1' },
-  { id: '2', icon: '💧', label: 'Disease name-2' },
-  { id: '3', icon: '👃', label: 'Disease name-3' },
-  { id: '4', icon: '🧠', label: 'Disease name-4' },
-  { id: '5', icon: '💚', label: 'Disease name-5' },
-];
-
-function HomeScreen() {
+export default function HomeScreen({ navigation }: HomeScreenProps) {
   return (
-    <SafeAreaView style={styles.screen}>
-      <StatusBar barStyle="light-content" backgroundColor="#7d56f1" />
-
-      <View style={styles.heroHeader}>
-        <Pressable style={styles.iconButton}>
-          <Text style={styles.iconText}>≡</Text>
-        </Pressable>
-
-        <View style={styles.locationBlock}>
-          <Text style={styles.locationLabel}>Location</Text>
-          <View style={styles.locationRow}>
-            <Text style={styles.locationText}>Sector 47, Gurgaon</Text>
-            <Text style={styles.locationArrow}>⌄</Text>
-          </View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.scrollView}>
+        {/* Header with menu button */}
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.openDrawer()}>
+            <Text style={styles.menuIcon}>☰</Text>
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Welcome</Text>
+          <View style={{ width: 24 }} />
         </View>
 
-        <Pressable style={styles.profileButton}>
-          <Text style={styles.profileIcon}>👤</Text>
-        </Pressable>
-      </View>
-
-      <ScrollView
-        contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled">
-        <Text style={styles.title}>Find care for your health</Text>
-
-        <View style={styles.searchCard}>
-          <View style={styles.searchInputWrapper}>
-            <Text style={styles.searchIcon}>🔍</Text>
-            <TextInput
-              placeholder="Search by hospital"
-              placeholderTextColor="#52525b"
-              style={styles.searchInput}
-            />
-          </View>
-          <Pressable style={styles.filterButton}>
-            <Text style={styles.filterIcon}>⚙️</Text>
-          </Pressable>
+        {/* Welcome Card */}
+        <View style={styles.welcomeCard}>
+          <Text style={styles.welcomeTitle}>Welcome to ABHA Health</Text>
+          <Text style={styles.welcomeSubtitle}>
+            Your comprehensive health companion
+          </Text>
         </View>
 
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Common Care</Text>
-          <Pressable style={styles.viewAllButton}>
-            <Text style={styles.viewAllText}>View all</Text>
-          </Pressable>
-        </View>
+        {/* Quick Actions */}
+        <View style={styles.sectionContainer}>
+          <Text style={styles.sectionTitle}>Quick Actions</Text>
 
-        <View style={styles.cardRow}>
-          {careItems.map(item => (
-            <View key={item.id} style={styles.categoryCard}>
-              <View style={styles.categoryIconWrapper}>
-                <Text style={styles.categoryIcon}>{item.icon}</Text>
-              </View>
-              <Text style={styles.categoryLabel}>{item.label}</Text>
+          <TouchableOpacity style={styles.actionCard}>
+            <View style={styles.actionIcon}>
+              <Text style={styles.iconText}>📅</Text>
             </View>
-          ))}
-        </View>
-
-        <View style={styles.sectionHeader}> 
-          <Text style={styles.sectionTitle}>Seasonal Care</Text>
-          <Pressable style={styles.viewAllButton}>
-            <Text style={styles.viewAllText}>View all</Text>
-          </Pressable>
-        </View>
-
-        <View style={styles.cardRow}>
-          {careItems.map(item => (
-            <View key={`seasonal-${item.id}`} style={styles.categoryCard}>
-              <View style={styles.categoryIconWrapper}>
-                <Text style={styles.categoryIcon}>{item.icon}</Text>
-              </View>
-              <Text style={styles.categoryLabel}>{item.label}</Text>
+            <View style={styles.actionContent}>
+              <Text style={styles.actionTitle}>Your Bookings</Text>
+              <Text style={styles.actionSubtitle}>View your appointments</Text>
             </View>
-          ))}
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.actionCard}>
+            <View style={styles.actionIcon}>
+              <Text style={styles.iconText}>❤️</Text>
+            </View>
+            <View style={styles.actionContent}>
+              <Text style={styles.actionTitle}>Saved Doctors</Text>
+              <Text style={styles.actionSubtitle}>Your favorite doctors</Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.actionCard}>
+            <View style={styles.actionIcon}>
+              <Text style={styles.iconText}>📋</Text>
+            </View>
+            <View style={styles.actionContent}>
+              <Text style={styles.actionTitle}>Medical Records</Text>
+              <Text style={styles.actionSubtitle}>Fetch your records</Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.actionCard}>
+            <View style={styles.actionIcon}>
+              <Text style={styles.iconText}>👥</Text>
+            </View>
+            <View style={styles.actionContent}>
+              <Text style={styles.actionTitle}>Family</Text>
+              <Text style={styles.actionSubtitle}>Manage family members</Text>
+            </View>
+          </TouchableOpacity>
         </View>
 
-        <View style={styles.bottomSpacing} />
+        {/* Featured Section */}
+        <View style={styles.sectionContainer}>
+          <Text style={styles.sectionTitle}>Featured Services</Text>
+
+          <TouchableOpacity style={styles.featuredCard}>
+            <Text style={styles.featuredIcon}>🏥</Text>
+            <Text style={styles.featuredTitle}>Find Hospitals</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.featuredCard}>
+            <Text style={styles.featuredIcon}>👨‍⚕️</Text>
+            <Text style={styles.featuredTitle}>Consult Doctors</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
-
-      <View style={styles.tabBar}>
-        <Pressable style={styles.tabItem}>
-          <Text style={styles.tabIcon}>🏠</Text>
-          <Text style={[styles.tabLabel, styles.tabLabelActive]}>Home</Text>
-        </Pressable>
-        <Pressable style={styles.tabItem}>
-          <Text style={styles.tabIcon}>👨‍⚕️</Text>
-          <Text style={styles.tabLabel}>Doctors</Text>
-        </Pressable>
-        <Pressable style={styles.tabItem}>
-          <Text style={styles.tabIcon}>📷</Text>
-          <Text style={styles.tabLabel}>Scan QR</Text>
-        </Pressable>
-        <Pressable style={styles.tabItem}>
-          <Text style={styles.tabIcon}>📅</Text>
-          <Text style={styles.tabLabel}>Bookings</Text>
-        </Pressable>
-      </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: {
+  container: {
     flex: 1,
-    backgroundColor: '#f8f7ff',
+    backgroundColor: '#f8f9fa',
   },
-  heroHeader: {
-    backgroundColor: '#7d56f1',
-    borderBottomLeftRadius: 28,
-    borderBottomRightRadius: 28,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 18,
-    paddingTop: 18,
-    paddingBottom: 20,
-    alignItems: 'center',
-  },
-  iconButton: {
-    backgroundColor: 'rgba(255,255,255,0.18)',
-    borderRadius: 14,
-    height: 44,
-    width: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  iconText: {
-    color: '#ffffff',
-    fontSize: 22,
-  },
-  locationBlock: {
+  scrollView: {
     flex: 1,
-    marginHorizontal: 14,
   },
-  locationLabel: {
-    color: '#d8cffd',
-    fontSize: 14,
-    marginBottom: 4,
-  },
-  locationRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: 6,
-  },
-  locationText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  locationArrow: {
-    color: '#ffffff',
-    fontSize: 14,
-  },
-  profileButton: {
-    backgroundColor: '#ffffff',
-    borderRadius: 14,
-    height: 44,
-    width: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  profileIcon: {
-    fontSize: 20,
-  },
-  content: {
-    paddingHorizontal: 18,
-    paddingTop: 22,
-    paddingBottom: 16,
-  },
-  title: {
-    color: '#111827',
-    fontSize: 28,
-    fontWeight: '800',
-    marginBottom: 18,
-  },
-  searchCard: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    padding: 14,
-    backgroundColor: '#ffffff',
-    borderRadius: 22,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.08,
-    shadowRadius: 18,
-    marginBottom: 24,
-  },
-  searchInputWrapper: {
-    flex: 1,
+  header: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-  },
-  searchIcon: {
-    fontSize: 20,
-  },
-  searchInput: {
-    color: '#111827',
-    fontSize: 16,
-    flex: 1,
-    minHeight: 40,
-  },
-  filterButton: {
-    alignItems: 'center',
-    backgroundColor: '#1ed0b6',
-    borderRadius: 16,
-    height: 44,
-    justifyContent: 'center',
-    paddingHorizontal: 14,
-  },
-  filterIcon: {
-    color: '#ffffff',
-    fontSize: 20,
-  },
-  sectionHeader: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 14,
-  },
-  sectionTitle: {
-    color: '#111827',
-    fontSize: 20,
-    fontWeight: '800',
-  },
-  viewAllButton: {
-    borderColor: '#0f9d81',
-    borderWidth: 1,
-    borderRadius: 999,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-  },
-  viewAllText: {
-    color: '#0f9d81',
-    fontWeight: '700',
-    fontSize: 14,
-  },
-  cardRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 10,
-    justifyContent: 'space-between',
-    marginBottom: 24,
-  },
-  categoryCard: {
-    alignItems: 'center',
-    backgroundColor: '#fbf9ff',
-    borderRadius: 20,
-    height: 120,
-    justifyContent: 'space-between',
-    padding: 14,
-    width: '19%',
-    minWidth: 68,
-    maxWidth: 68,
-  },
-  categoryIconWrapper: {
-    alignItems: 'center',
-    backgroundColor: '#e8f7f0',
-    borderRadius: 18,
-    height: 52,
-    justifyContent: 'center',
-    width: 52,
-  },
-  categoryIcon: {
-    fontSize: 24,
-  },
-  categoryLabel: {
-    color: '#0f172a',
-    fontSize: 10,
-    fontWeight: '600',
-    lineHeight: 16,
-    textAlign: 'center',
-  },
-  bottomSpacing: {
-    height: 24,
-  },
-  tabBar: {
-    alignItems: 'center',
-    backgroundColor: '#ffffff',
-    borderTopColor: '#e5e7eb',
-    borderTopWidth: 1,
-    flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingVertical: 12,
+    backgroundColor: '#ffffff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e5e7eb',
   },
-  tabItem: {
-    alignItems: 'center',
+  menuIcon: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#111827',
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#111827',
+  },
+  welcomeCard: {
+    margin: 16,
+    padding: 20,
+    backgroundColor: 'linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%)',
+    borderRadius: 12,
     justifyContent: 'center',
   },
-  tabIcon: {
-    fontSize: 20,
-    marginBottom: 4,
-  },
-  tabLabel: {
-    color: '#6b7280',
-    fontSize: 11,
+  welcomeTitle: {
+    fontSize: 24,
     fontWeight: '700',
+    color: '#ffffff',
+    marginBottom: 8,
   },
-  tabLabelActive: {
-    color: '#0f9d81',
+  welcomeSubtitle: {
+    fontSize: 14,
+    color: '#e0e7ff',
+  },
+  sectionContainer: {
+    paddingHorizontal: 16,
+    marginVertical: 16,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#111827',
+    marginBottom: 12,
+  },
+  actionCard: {
+    flexDirection: 'row',
+    backgroundColor: '#ffffff',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  actionIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 12,
+    backgroundColor: '#f3f4f6',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+  },
+  iconText: {
+    fontSize: 24,
+  },
+  actionContent: {
+    flex: 1,
+  },
+  actionTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#111827',
+    marginBottom: 2,
+  },
+  actionSubtitle: {
+    fontSize: 12,
+    color: '#6b7280',
+  },
+  featuredCard: {
+    backgroundColor: '#ffffff',
+    borderRadius: 12,
+    padding: 20,
+    marginBottom: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 100,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  featuredIcon: {
+    fontSize: 32,
+    marginBottom: 8,
+  },
+  featuredTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#111827',
   },
 });
-
-export default HomeScreen;

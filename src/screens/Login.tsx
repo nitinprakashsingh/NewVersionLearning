@@ -10,7 +10,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-
+//hello testing i want to push it on git hub
 import HealthHero from '../components/HealthHero';
 import type { RootStackParamList } from '../navigation/RootNavigator';
 
@@ -28,7 +28,11 @@ function LoginScreen({ navigation }: Props) {
 
       <HealthHero
         showSkip
-        onSkip={() => navigation.navigate('Home')}
+        onSkip={() =>
+          navigation.navigate('Details', {
+            message: 'Login skipped',
+          })
+        }
       />
 
       <View style={styles.loginPanel}>
