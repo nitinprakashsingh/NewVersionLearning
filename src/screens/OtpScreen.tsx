@@ -87,9 +87,7 @@ function OtpScreen({ navigation, route }: Props) {
 
           <Pressable
             onPress={() =>
-              navigation.navigate('Details', {
-                message: `OTP verified: ${displayOtp}`,
-              })
+              navigation.navigate('AppDrawer')
             }
             style={({ pressed }) => [
               styles.verifyButton,
