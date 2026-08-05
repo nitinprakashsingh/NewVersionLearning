@@ -1,14 +1,14 @@
 import React from 'react';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 import 'react-native-gesture-handler';
 
+import CustomDrawerContent from '../components/CustomDrawerContent';
 import DetailsScreen from '../screens/DetailsScreen';
+import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from '../screens/Login';
 import OtpScreen from '../screens/OtpScreen';
-import HomeScreen from '../screens/HomeScreen';
-import CustomDrawerContent from '../components/CustomDrawerContent';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -16,13 +16,13 @@ export type RootStackParamList = {
     mobileNumber: string;
   };
   AppDrawer: undefined;
+  Details: {
+    message?: string;
+  };
 };
 
 export type DrawerParamList = {
   Home: undefined;
-  Details: {
-    message?: string;
-  };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -31,38 +31,13 @@ const Drawer = createDrawerNavigator<DrawerParamList>();
 function DrawerNavigator() {
   return (
     <Drawer.Navigator
-      drawerContent={(props) => <CustomDrawerContent {...props} />}
+      drawerContent={props => <CustomDrawerContent {...props} />}
       screenOptions={{
-        headerStyle: {
-          backgroundColor: '#f7f8fa',
-        },
-        headerTintColor: '#111827',
-        headerTitleStyle: {
-          fontWeight: '600',
-        },
-        contentStyle: {
-          backgroundColor: '#ffffff',
-        },
+        drawerStyle: { width: '85%' },
         drawerType: 'slide',
-        drawerStyle: {
-          width: '85%',
-        },
+        headerShown: false,
       }}>
-      <Drawer.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          headerShown: false,
-          drawerLabel: 'Home',
-        }}
-      />
-      <Drawer.Screen
-        name="Details"
-        component={DetailsScreen}
-        options={{
-          title: 'Details',
-        }}
-      />
+      <Drawer.Screen name="Home" component={HomeScreen} />
     </Drawer.Navigator>
   );
 }
@@ -70,20 +45,7 @@ function DrawerNavigator() {
 function RootNavigator() {
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Login"
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: '#f7f8fa',
-          },
-          headerTintColor: '#111827',
-          headerTitleStyle: {
-            fontWeight: '600',
-          },
-          contentStyle: {
-            backgroundColor: '#ffffff',
-          },
-        }}>
+      <Stack.Navigator initialRouteName="Login">
         <Stack.Screen
           name="Login"
           component={LoginScreen}
@@ -97,6 +59,11 @@ function RootNavigator() {
         <Stack.Screen
           name="AppDrawer"
           component={DrawerNavigator}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Details"
+          component={DetailsScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

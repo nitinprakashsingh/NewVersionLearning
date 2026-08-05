@@ -9,8 +9,7 @@ import {
   Alert,
 } from 'react-native';
 import {
-  DrawerNavigationProp,
-  DrawerContentScrollViewProps,
+  DrawerContentComponentProps,
 } from '@react-navigation/drawer';
 
 interface DrawerItem {
@@ -20,9 +19,9 @@ interface DrawerItem {
 }
 
 export default function CustomDrawerContent(
-  props: DrawerContentScrollViewProps
+  props: DrawerContentComponentProps
 ) {
-  const navigation = props.navigation as DrawerNavigationProp<any>;
+  const { navigation } = props;
 
   const drawerItems: DrawerItem[] = [
     {
@@ -109,8 +108,7 @@ export default function CustomDrawerContent(
         text: 'Log Out',
         onPress: () => {
           navigation.closeDrawer();
-          // Navigate to login screen
-          navigation.navigate('Login');
+          navigation.getParent()?.navigate('Login');
         },
         style: 'destructive',
       },
