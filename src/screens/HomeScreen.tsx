@@ -1,218 +1,46 @@
+import type { DrawerNavigationProp } from '@react-navigation/drawer';
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-  SafeAreaView,
-} from 'react-native';
-import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-type HomeScreenProps = {
-  navigation: DrawerNavigationProp<any>;
-};
+type HomeScreenProps = { navigation: DrawerNavigationProp<any> };
+
+const actions = [
+  { icon: '▣', title: 'Appointments', subtitle: 'View and manage bookings' },
+  { icon: '♥', title: 'Saved care', subtitle: 'Doctors and hospitals you trust' },
+  { icon: '▤', title: 'Health records', subtitle: 'Access your medical history' },
+  { icon: '◎', title: 'Family members', subtitle: 'Care for your loved ones' },
+];
 
 export default function HomeScreen({ navigation }: HomeScreenProps) {
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView}>
-        {/* Header with menu button */}
+      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.openDrawer()}>
-            <Text style={styles.menuIcon}>☰</Text>
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Welcome</Text>
-          <View style={{ width: 24 }} />
+          <TouchableOpacity accessibilityLabel="Open menu" onPress={() => navigation.openDrawer()} style={styles.menuButton}><Text style={styles.menuIcon}>☰</Text></TouchableOpacity>
+          <View><Text style={styles.greeting}>Good morning</Text><Text style={styles.name}>Amit</Text></View>
+          <View style={styles.avatar}><Text style={styles.avatarText}>AY</Text></View>
         </View>
-
-        {/* Welcome Card */}
-        <View style={styles.welcomeCard}>
-          <Text style={styles.welcomeTitle}>Welcome to ABHA Health</Text>
-          <Text style={styles.welcomeSubtitle}>
-            Your comprehensive health companion
-          </Text>
+        <View style={styles.healthCard}>
+          <View style={styles.cardDecoration} /><Text style={styles.cardEyebrow}>ABHA HEALTH ID</Text>
+          <Text style={styles.cardTitle}>Your health,{`\n`}all in one place.</Text>
+          <Text style={styles.cardSubtext}>Securely access the services that matter to you.</Text>
+          <TouchableOpacity style={styles.cardButton}><Text style={styles.cardButtonText}>View profile  →</Text></TouchableOpacity>
         </View>
-
-        {/* Quick Actions */}
-        <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>Quick Actions</Text>
-
-          <TouchableOpacity style={styles.actionCard}>
-            <View style={styles.actionIcon}>
-              <Text style={styles.iconText}>📅</Text>
-            </View>
-            <View style={styles.actionContent}>
-              <Text style={styles.actionTitle}>Your Bookings</Text>
-              <Text style={styles.actionSubtitle}>View your appointments</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.actionCard}>
-            <View style={styles.actionIcon}>
-              <Text style={styles.iconText}>❤️</Text>
-            </View>
-            <View style={styles.actionContent}>
-              <Text style={styles.actionTitle}>Saved Doctors</Text>
-              <Text style={styles.actionSubtitle}>Your favorite doctors</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.actionCard}>
-            <View style={styles.actionIcon}>
-              <Text style={styles.iconText}>📋</Text>
-            </View>
-            <View style={styles.actionContent}>
-              <Text style={styles.actionTitle}>Medical Records</Text>
-              <Text style={styles.actionSubtitle}>Fetch your records</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.actionCard}>
-            <View style={styles.actionIcon}>
-              <Text style={styles.iconText}>👥</Text>
-            </View>
-            <View style={styles.actionContent}>
-              <Text style={styles.actionTitle}>Family</Text>
-              <Text style={styles.actionSubtitle}>Manage family members</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-
-        {/* Featured Section */}
-        <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>Featured Services</Text>
-
-          <TouchableOpacity style={styles.featuredCard}>
-            <Text style={styles.featuredIcon}>🏥</Text>
-            <Text style={styles.featuredTitle}>Find Hospitals</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.featuredCard}>
-            <Text style={styles.featuredIcon}>👨‍⚕️</Text>
-            <Text style={styles.featuredTitle}>Consult Doctors</Text>
-          </TouchableOpacity>
-        </View>
+        <View style={styles.sectionHeader}><Text style={styles.sectionTitle}>Your health hub</Text><Text style={styles.sectionHint}>Explore</Text></View>
+        <View style={styles.actionGrid}>{actions.map(action => <TouchableOpacity key={action.title} style={styles.actionCard}><View style={styles.actionIcon}><Text style={styles.actionIconText}>{action.icon}</Text></View><Text style={styles.actionTitle}>{action.title}</Text><Text style={styles.actionSubtitle}>{action.subtitle}</Text></TouchableOpacity>)}</View>
+        <Text style={styles.sectionTitle}>Discover care</Text>
+        <TouchableOpacity style={styles.discoverCard}><View style={styles.discoverIcon}><Text style={styles.discoverIconText}>⌕</Text></View><View style={styles.discoverCopy}><Text style={styles.discoverTitle}>Find a hospital nearby</Text><Text style={styles.discoverSubtitle}>Search verified providers around you</Text></View><Text style={styles.chevron}>›</Text></TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f8f9fa',
-  },
-  scrollView: {
-    flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: '#ffffff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e5e7eb',
-  },
-  menuIcon: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#111827',
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#111827',
-  },
-  welcomeCard: {
-    margin: 16,
-    padding: 20,
-    backgroundColor: 'linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%)',
-    borderRadius: 12,
-    justifyContent: 'center',
-  },
-  welcomeTitle: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#ffffff',
-    marginBottom: 8,
-  },
-  welcomeSubtitle: {
-    fontSize: 14,
-    color: '#e0e7ff',
-  },
-  sectionContainer: {
-    paddingHorizontal: 16,
-    marginVertical: 16,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#111827',
-    marginBottom: 12,
-  },
-  actionCard: {
-    flexDirection: 'row',
-    backgroundColor: '#ffffff',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 3,
-  },
-  actionIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 12,
-    backgroundColor: '#f3f4f6',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 12,
-  },
-  iconText: {
-    fontSize: 24,
-  },
-  actionContent: {
-    flex: 1,
-  },
-  actionTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#111827',
-    marginBottom: 2,
-  },
-  actionSubtitle: {
-    fontSize: 12,
-    color: '#6b7280',
-  },
-  featuredCard: {
-    backgroundColor: '#ffffff',
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 100,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 3,
-  },
-  featuredIcon: {
-    fontSize: 32,
-    marginBottom: 8,
-  },
-  featuredTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#111827',
-  },
+  container: { flex: 1, backgroundColor: '#F7F8FC' }, content: { padding: 20, paddingBottom: 32 },
+  header: { alignItems: 'center', flexDirection: 'row', marginBottom: 25 }, menuButton: { alignItems: 'center', backgroundColor: '#FFFFFF', borderRadius: 14, elevation: 2, height: 46, justifyContent: 'center', marginRight: 13, shadowColor: '#101828', shadowOpacity: 0.06, shadowRadius: 7, width: 46 }, menuIcon: { color: '#344054', fontSize: 23 },
+  greeting: { color: '#667085', fontSize: 13 }, name: { color: '#172033', fontSize: 20, fontWeight: '800' }, avatar: { alignItems: 'center', backgroundColor: '#E7E0FF', borderRadius: 18, height: 36, justifyContent: 'center', marginLeft: 'auto', width: 36 }, avatarText: { color: '#49348B', fontSize: 12, fontWeight: '800' },
+  healthCard: { backgroundColor: '#49348B', borderRadius: 22, minHeight: 216, overflow: 'hidden', padding: 23 }, cardDecoration: { backgroundColor: '#725CB1', borderRadius: 100, height: 200, position: 'absolute', right: -63, top: -50, width: 200 }, cardEyebrow: { color: '#B9AAED', fontSize: 11, fontWeight: '800', letterSpacing: 1 }, cardTitle: { color: '#FFFFFF', fontSize: 27, fontWeight: '800', letterSpacing: -0.5, lineHeight: 32, marginTop: 9 }, cardSubtext: { color: '#DDD7F6', fontSize: 13, lineHeight: 19, marginTop: 9, maxWidth: '78%' }, cardButton: { backgroundColor: '#A5F3E2', borderRadius: 10, marginTop: 15, paddingHorizontal: 13, paddingVertical: 9, alignSelf: 'flex-start' }, cardButtonText: { color: '#234D49', fontSize: 13, fontWeight: '800' },
+  sectionHeader: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 14, marginTop: 28 }, sectionTitle: { color: '#172033', fontSize: 19, fontWeight: '800' }, sectionHint: { color: '#0F9D88', fontSize: 13, fontWeight: '700' },
+  actionGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginBottom: 28 }, actionCard: { backgroundColor: '#FFFFFF', borderColor: '#EAECF0', borderRadius: 17, borderWidth: 1, minHeight: 148, padding: 15, width: '48.2%' }, actionIcon: { alignItems: 'center', backgroundColor: '#EDF9F7', borderRadius: 10, height: 34, justifyContent: 'center', width: 34 }, actionIconText: { color: '#0F9D88', fontSize: 20, fontWeight: '700' }, actionTitle: { color: '#344054', fontSize: 15, fontWeight: '800', marginTop: 13 }, actionSubtitle: { color: '#98A2B3', fontSize: 12, lineHeight: 17, marginTop: 5 },
+  discoverCard: { alignItems: 'center', backgroundColor: '#FFFFFF', borderColor: '#EAECF0', borderRadius: 16, borderWidth: 1, flexDirection: 'row', marginTop: 13, padding: 15 }, discoverIcon: { alignItems: 'center', backgroundColor: '#EEEAFE', borderRadius: 12, height: 44, justifyContent: 'center', width: 44 }, discoverIconText: { color: '#49348B', fontSize: 26, fontWeight: '700' }, discoverCopy: { flex: 1, marginLeft: 12 }, discoverTitle: { color: '#344054', fontSize: 15, fontWeight: '800' }, discoverSubtitle: { color: '#98A2B3', fontSize: 12, marginTop: 4 }, chevron: { color: '#667085', fontSize: 28 },
 });

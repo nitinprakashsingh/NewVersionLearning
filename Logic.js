@@ -1,34 +1,34 @@
-import React,{useState, useEffect, use} from "react";
-import{View, TouchableOpacity, TextInput,FlatList} from "react-native";
+// import React,{useState, useEffect, use} from "react";
+// import{View, TouchableOpacity, TextInput,FlatList} from "react-native";
 
 
 
 
-function UserList(){
-    const [data, setData] = useState([]);
+// function UserList(){
+//     const [data, setData] = useState([]);
 
-    function fetchData(text){
-        setTimeout(() => {
-        var result = fetch("https://api.api-ninjas.com/v2/randomuser?{text")
-        setData(result) 
-        }, 2000);
-    }
+//     function fetchData(text){
+//         setTimeout(() => {
+//         var result = fetch("https://api.api-ninjas.com/v2/randomuser?{text")
+//         setData(result) 
+//         }, 2000);
+//     }
 
 
 
-    return(
-        <View>
-            <TextInput placeholder="Enter Mobile Number"
-             onChangeText={(text) => fetchData(text)} />
-             <FlatList/>
-        </View>
-    )
+//     return(
+//         <View>
+//             <TextInput placeholder="Enter Mobile Number"
+//              onChangeText={(text) => fetchData(text)} />
+//              <FlatList/>
+//         </View>
+//     )
 
-}
-export default UserList
+// }
+// export default UserList
 
-const Styles= StyleSheet.create({
-    container: {
-        flex:1
-    }
-})
+// const Styles= StyleSheet.create({
+//     container: {
+//         flex:1
+//     }
+// })
