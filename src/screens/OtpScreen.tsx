@@ -1,201 +1,86 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useMemo, useRef, useState } from 'react';
-import {
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import React, { useRef, useState } from 'react';
+import { KeyboardAvoidingView, Platform, Pressable, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native';
 
-import HealthHero from '../components/HealthHero';
 import type { RootStackParamList } from '../navigation/RootNavigator';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Otp'>;
-
 const otpLength = 6;
 
 function OtpScreen({ navigation, route }: Props) {
-  const [otp, setOtp] = useState(['9', '9', '', '', '', '9']);
-  const inputRefs = useRef<Array<TextInput | null>>([]);
-  const mobileNumber = route.params.mobileNumber;
-
-  const displayOtp = useMemo(() => otp.join(''), [otp]);
+  const [otp, setOtp] = useState(Array(otpLength).fill(''));
+  const inputs = useRef<Array<TextInput | null>>([]);
+  const isComplete = otp.every(Boolean);
 
   const updateOtp = (value: string, index: number) => {
-    const nextValue = value.slice(-1);
-    const nextOtp = [...otp];
-    nextOtp[index] = nextValue;
-    setOtp(nextOtp);
+    const digit = value.replace(/[^0-9]/g, '').slice(-1);
+    const next = [...otp];
+    next[index] = digit;
+    setOtp(next);
+    if (digit && index < otpLength - 1) inputs.current[index + 1]?.focus();
+  };
 
-    if (nextValue && index < otpLength - 1) {
-      inputRefs.current[index + 1]?.focus();
-    }
+  const onKeyPress = (key: string, index: number) => {
+    if (key === 'Backspace' && !otp[index] && index > 0) inputs.current[index - 1]?.focus();
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      style={styles.screen}>
-      <StatusBar barStyle="light-content" backgroundColor="#7658bd" />
-
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}>
-        <HealthHero />
-
-        <View style={styles.otpPanel}>
-          <Text style={styles.panelTitle}>Verify OTP</Text>
-
-          <View style={styles.sentRow}>
-            <Text style={styles.sentText}>Otp sent to {mobileNumber}</Text>
-            <Pressable
-              onPress={() => navigation.goBack()}
-              style={({ pressed }) => [
-                styles.editButton,
-                pressed && styles.pressed,
-              ]}>
-              <Text style={styles.editText}>Edit</Text>
-            </Pressable>
+    <SafeAreaView style={styles.safeArea}>
+      <StatusBar barStyle="light-content" backgroundColor="#49348B" />
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.screen}>
+        <View style={styles.header}>
+          <Pressable onPress={() => navigation.goBack()} style={styles.backButton}><Text style={styles.backText}>‹</Text></Pressable>
+          <Text style={styles.headerTitle}>Verify your number</Text>
+          <View style={styles.headerSpacer} />
+        </View>
+        <View style={styles.iconCircle}><Text style={styles.iconText}>✦</Text></View>
+        <View style={styles.content}>
+          <Text style={styles.title}>Enter verification code</Text>
+          <Text style={styles.description}>We sent a 6-digit code to</Text>
+          <View style={styles.numberRow}>
+            <Text style={styles.numberText}>+91 {route.params.mobileNumber}</Text>
+            <Pressable onPress={() => navigation.goBack()}><Text style={styles.editText}>Change</Text></Pressable>
           </View>
-
-          <Text style={styles.typedOtp}>{displayOtp}</Text>
-
-          <View style={styles.otpBoxes}>
+          <View style={styles.otpRow}>
             {otp.map((digit, index) => (
               <TextInput
-                key={index}
+                autoFocus={index === 0}
                 keyboardType="number-pad"
+                key={index}
                 maxLength={1}
                 onChangeText={value => updateOtp(value, index)}
-                ref={ref => {
-                  inputRefs.current[index] = ref;
-                }}
-                style={styles.otpInput}
+                onKeyPress={({ nativeEvent }) => onKeyPress(nativeEvent.key, index)}
+                ref={ref => { inputs.current[index] = ref; }}
+                selectTextOnFocus
+                style={[styles.otpInput, Boolean(digit) && styles.otpInputFilled]}
                 textAlign="center"
                 value={digit}
               />
             ))}
           </View>
-
-          <Text style={styles.resendText}>Resend OTP in 00.30</Text>
-
-          <Pressable
-            onPress={() =>
-              navigation.navigate('AppDrawer')
-            }
-            style={({ pressed }) => [
-              styles.verifyButton,
-              pressed && styles.pressed,
-            ]}>
-            <Text style={styles.verifyText}>Verify OTP</Text>
+          <Text style={styles.helperText}>The code expires in <Text style={styles.timerText}>00:30</Text></Text>
+          <Pressable style={styles.resendButton}><Text style={styles.resendText}>Resend code</Text></Pressable>
+          <Pressable disabled={!isComplete} onPress={() => navigation.replace('AppDrawer')} style={({ pressed }) => [styles.verifyButton, !isComplete && styles.verifyButtonDisabled, pressed && isComplete && styles.pressed]}>
+            <Text style={styles.verifyText}>Verify and continue</Text>
           </Pressable>
         </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-  },
-  scrollContent: {
-    flexGrow: 1,
-  },
-  otpPanel: {
-    backgroundColor: '#ffffff',
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    marginTop: -46,
-    minHeight: 360,
-    paddingBottom: 80,
-    paddingHorizontal: 20,
-    paddingTop: 54,
-  },
-  panelTitle: {
-    color: '#000000',
-    fontSize: 24,
-    fontWeight: '800',
-    marginBottom: 8,
-  },
-  sentRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: 8,
-  },
-  sentText: {
-    color: '#777777',
-    fontSize: 17,
-  },
-  editButton: {
-    paddingHorizontal: 6,
-    paddingVertical: 4,
-  },
-  editText: {
-    color: '#06a96e',
-    fontSize: 13,
-    fontWeight: '700',
-  },
-  typedOtp: {
-    color: '#000000',
-    fontSize: 28,
-    fontWeight: '400',
-    marginTop: 82,
-    paddingLeft: 24,
-  },
-  otpBoxes: {
-    flexDirection: 'row',
-    gap: 8,
-    justifyContent: 'space-between',
-    marginTop: 86,
-  },
-  otpInput: {
-    backgroundColor: '#fafafa',
-    borderColor: '#eeeeee',
-    borderRadius: 9,
-    borderWidth: 1,
-    color: '#000000',
-    elevation: 1,
-    fontSize: 22,
-    fontWeight: '800',
-    height: 37,
-    includeFontPadding: false,
-    padding: 0,
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.06,
-    shadowRadius: 2,
-    flex: 1,
-  },
-  resendText: {
-    color: '#777777',
-    fontSize: 18,
-    marginTop: 46,
-    paddingLeft: 8,
-  },
-  verifyButton: {
-    alignItems: 'center',
-    backgroundColor: '#10b79f',
-    borderRadius: 16,
-    height: 47,
-    justifyContent: 'center',
-    marginTop: 46,
-  },
-  verifyText: {
-    color: '#ffffff',
-    fontSize: 18,
-    fontWeight: '800',
-  },
-  pressed: {
-    opacity: 0.78,
-  },
+  safeArea: { flex: 1, backgroundColor: '#49348B' }, screen: { flex: 1, backgroundColor: '#F7F8FC' },
+  header: { alignItems: 'center', backgroundColor: '#49348B', flexDirection: 'row', height: 68, justifyContent: 'space-between', paddingHorizontal: 20 },
+  backButton: { alignItems: 'center', height: 38, justifyContent: 'center', width: 38 }, backText: { color: '#FFFFFF', fontSize: 37, fontWeight: '300', lineHeight: 38 },
+  headerTitle: { color: '#FFFFFF', fontSize: 16, fontWeight: '700' }, headerSpacer: { width: 38 },
+  iconCircle: { alignItems: 'center', alignSelf: 'center', backgroundColor: '#A5F3E2', borderColor: '#FFFFFF', borderRadius: 43, borderWidth: 6, height: 86, justifyContent: 'center', marginBottom: -43, marginTop: 16, width: 86, zIndex: 1 },
+  iconText: { color: '#49348B', fontSize: 35 }, content: { backgroundColor: '#F7F8FC', flex: 1, paddingHorizontal: 24, paddingTop: 76 },
+  title: { color: '#172033', fontSize: 26, fontWeight: '800', letterSpacing: -0.5, textAlign: 'center' }, description: { color: '#667085', fontSize: 15, marginTop: 10, textAlign: 'center' },
+  numberRow: { alignItems: 'center', flexDirection: 'row', justifyContent: 'center', marginTop: 7 }, numberText: { color: '#344054', fontSize: 15, fontWeight: '700' }, editText: { color: '#0F9D88', fontSize: 14, fontWeight: '800', marginLeft: 10 },
+  otpRow: { flexDirection: 'row', gap: 8, marginTop: 36 }, otpInput: { backgroundColor: '#FFFFFF', borderColor: '#D0D5DD', borderRadius: 12, borderWidth: 1, color: '#172033', flex: 1, fontSize: 21, fontWeight: '800', height: 53 }, otpInputFilled: { borderColor: '#0F9D88', borderWidth: 2 },
+  helperText: { color: '#667085', fontSize: 14, marginTop: 22, textAlign: 'center' }, timerText: { color: '#49348B', fontWeight: '800' }, resendButton: { alignSelf: 'center', padding: 12, marginTop: 5 }, resendText: { color: '#0F9D88', fontSize: 14, fontWeight: '800' },
+  verifyButton: { alignItems: 'center', backgroundColor: '#0F9D88', borderRadius: 14, height: 56, justifyContent: 'center', marginTop: 24 }, verifyButtonDisabled: { backgroundColor: '#B8DCD6' }, verifyText: { color: '#FFFFFF', fontSize: 16, fontWeight: '800' }, pressed: { opacity: 0.85 },
 });
 
 export default OtpScreen;

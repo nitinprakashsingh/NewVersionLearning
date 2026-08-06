@@ -19,7 +19,8 @@ function App() {
   return (
     <SafeAreaProvider>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      {showSplash ? <SplashScreen /> : <RootNavigator />}
+      {/* {showSplash ? <SplashScreen /> : <RootNavigator />} */}
+      <RootNavigator />
     </SafeAreaProvider>
   );
 }
